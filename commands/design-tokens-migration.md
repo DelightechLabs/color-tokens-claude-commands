@@ -97,16 +97,16 @@ Search the entire codebase for:
 **🔍 Required Search Commands:**
 ```bash
 # Find ALL CSS variables (regardless of prefix) to get complete inventory
-grep -r "var(--[^)]\+)" src/ --include="*.scss" --include="*.css"
+grep -r "var(--[^)]\+)" src/ --include="*.css" --include="*.css"
 
 # Extract unique CSS variable names for analysis
-grep -r "var(--[^)]\+)" src/ --include="*.scss" --include="*.css" -o | sed 's/.*var(//' | sed 's/).*//' | sort | uniq
+grep -r "var(--[^)]\+)" src/ --include="*.css" --include="*.css" -o | sed 's/.*var(//' | sed 's/).*//' | sort | uniq
 
 # Find hardcoded colors
-grep -r "#[0-9a-fA-F]\{3,6\}\|rgb\|hsl\|rgba\|hsla" src/ --include="*.scss" --include="*.css"
+grep -r "#[0-9a-fA-F]\{3,6\}\|rgb\|hsl\|rgba\|hsla" src/ --include="*.css" --include="*.css"
 
 # Find named colors (common ones)
-grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b\|\bgray\b\|\bgrey\b" src/ --include="*.scss" --include="*.css"
+grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b\|\bgray\b\|\bgrey\b" src/ --include="*.css" --include="*.css"
 ```
 
 **⚠️ Critical Verification: Complete CSS Variable Analysis**
@@ -138,14 +138,14 @@ ALL color variables must be replaced with semantic tokens following the referenc
 ✅ Replace explicitly with proper semantic tokens.
 
 **Step 1.2: Create Semantic Tokens File**
-1. Create `src/styles/semantic-color-variables.scss`
+1. Create `src/styles/semantic-color-variables.css`
 2. Add the file structure with all semantic token definitions
 3. Initially set all tokens to recognizable placeholder values for testing
 
 **Step 1.3: Set Up Import**
-Add import to your main CSS file (common locations: `src/styles/global.scss`, `src/index.css`, `src/main.css`):
-```scss
-@import './semantic-color-variables.scss';
+Add import to your main CSS file (common locations: `src/styles/global.css`, `src/index.css`, `src/main.css`):
+```css
+@import './semantic-color-variables.css';
 ```
 
 **Step 1.4: Body Background Check**
@@ -153,12 +153,12 @@ Check if the body element has a defined background color and ensure it uses the 
 
 1. **Search for body background definition:**
 ```bash
-grep -r "body\s*{[^}]*background" src/ --include="*.scss" --include="*.css"
-grep -r "html,\s*body\s*{[^}]*background" src/ --include="*.scss" --include="*.css"
+grep -r "body\s*{[^}]*background" src/ --include="*.css" --include="*.css"
+grep -r "html,\s*body\s*{[^}]*background" src/ --include="*.css" --include="*.css"
 ```
 
 2. **If body background is found:** Replace it with the semantic token:
-```scss
+```css
 /* Replace any existing body background with semantic token */
 body {
   background-color: var(--color-background-layer-base);
@@ -167,15 +167,15 @@ body {
 ```
 
 3. **If body background is NOT found (assumes white):** Add the semantic background to your main CSS file:
-```scss
-/* Add to global.scss or main CSS file */
+```css
+/* Add to global.css or main CSS file */
 body {
   background-color: var(--color-background-layer-base);
 }
 ```
 
-4. **Verify the body background semantic token is correctly set** in `semantic-color-variables.scss`:
-```scss
+4. **Verify the body background semantic token is correctly set** in `semantic-color-variables.css`:
+```css
 :root {
   --color-background-layer-base: #ffffff; /* or appropriate base background color based on body element background */
   /* ... other tokens */
@@ -208,7 +208,7 @@ body {
 - ✅ Search commands executed and results documented
 
 ### Files Created:
-- ✅ src/styles/semantic-color-variables.scss (with placeholder tokens)
+- ✅ src/styles/semantic-color-variables.css (with placeholder tokens)
 - ✅ Import added to [main CSS file]
 - ✅ Body background verified/added with semantic token
 
@@ -242,7 +242,7 @@ For every semantic token, document whether usage was found:
 
 --color-brand-primary:
 ├── PURPOSE: "Primary buttons, main call-to-action backgrounds"
-├── SEARCH RESULT: ✅ FOUND - ButtonNew.module.scss:13 primary button background
+├── SEARCH RESULT: ✅ FOUND - ButtonNew.module.css:13 primary button background
 ├── EVIDENCE: var(--primary-600) used for primary button
 └── MAPPING: --color-brand-primary: #8547ff
 
@@ -254,14 +254,14 @@ For every semantic token, document whether usage was found:
 ```
 
 **Step 2.3: Populate Semantic Tokens with Evidence**
-In `src/styles/semantic-color-variables.scss`, include file:line evidence for every mapping:
+In `src/styles/semantic-color-variables.css`, include file:line evidence for every mapping:
 
-```scss
+```css
 :root {
   /* EVIDENCE-BASED MAPPINGS ONLY */
-  --color-brand-primary: #8547ff;         /* EVIDENCE: ButtonNew.module.scss:13 var(--primary-600) */
-  --color-container-paper: #ffffff;       /* EVIDENCE: NoteEditor.module.scss:5, SearchBar.module.scss:58 white */
-  --color-text-primary: #343a40;          /* EVIDENCE: global.scss:7 var(--neutral-800) */
+  --color-brand-primary: #8547ff;         /* EVIDENCE: ButtonNew.module.css:13 var(--primary-600) */
+  --color-container-paper: #ffffff;       /* EVIDENCE: NoteEditor.module.css:5, SearchBar.module.css:58 white */
+  --color-text-primary: #343a40;          /* EVIDENCE: global.css:7 var(--neutral-800) */
 }
 
 /* ==========================================
@@ -407,7 +407,7 @@ Update page-level components and global styles.
 - ✅ All components visually identical
 - ✅ All interactions work properly
 - ✅ Development server runs without errors
-- ✅ No hard-coded colors remain (except in semantic-color-variables.scss)
+- ✅ No hard-coded colors remain (except in semantic-color-variables.css)
 
 **Ready to proceed to Phase 4 (Final Validation)? Please confirm before continuing.**
 ```
@@ -421,19 +421,19 @@ Update page-level components and global styles.
 **🔍 Required Verification Commands:**
 ```bash
 # Verify NO non-semantic variables remain (result must be empty)
-grep -r "var(--(?!color-|spacing-|radius-|shadow-|transition-)" src/ --include="*.scss" --include="*.css"
+grep -r "var(--(?!color-|spacing-|radius-|shadow-|transition-)" src/ --include="*.css" --include="*.css"
 
-# Verify no hardcoded colors remain outside semantic-color-variables.scss
-grep -r "#[0-9a-fA-F]\{3,6\}\|rgb\|hsl\|rgba\|hsla" src/ --exclude="semantic-color-variables.scss" --include="*.scss" --include="*.css"
+# Verify no hardcoded colors remain outside semantic-color-variables.css
+grep -r "#[0-9a-fA-F]\{3,6\}\|rgb\|hsl\|rgba\|hsla" src/ --exclude="semantic-color-variables.css" --include="*.css" --include="*.css"
 
 # Verify no named colors remain
-grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="semantic-color-variables.scss" --include="*.scss" --include="*.css"
+grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="semantic-color-variables.css" --include="*.css" --include="*.css"
 ```
 
-**⚠️ CRITICAL:** All above commands MUST return empty results (except for semantic-color-variables.scss)
+**⚠️ CRITICAL:** All above commands MUST return empty results (except for semantic-color-variables.css)
 
 **Additional Validation:**
-- Ensure no color values remain outside of `semantic-color-variables.scss`
+- Ensure no color values remain outside of `semantic-color-variables.css`
 - Run linting: `npm run lint` (if available)
 - Run build: `npm run build` (if available)
 
@@ -447,7 +447,7 @@ grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="sem
 ### ✅ Successfully Migrated Design Tokens
 
 ### Files Structure:
-- ✅ src/styles/semantic-color-variables.scss (contains all color definitions)
+- ✅ src/styles/semantic-color-variables.css (contains all color definitions)
 - ✅ [main CSS file] (imports semantic tokens)
 - ✅ All component files use only semantic tokens
 
@@ -458,8 +458,8 @@ grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="sem
 - ✅ Linting passes
 - ✅ **CRITICAL VERIFICATION PASSED:**
   - ✅ No non-semantic CSS variables remain (grep command returned empty)
-  - ✅ No hardcoded colors outside semantic-color-variables.scss (grep command returned empty)
-  - ✅ No named colors outside semantic-color-variables.scss (grep command returned empty)
+  - ✅ No hardcoded colors outside semantic-color-variables.css (grep command returned empty)
+  - ✅ No named colors outside semantic-color-variables.css (grep command returned empty)
   - ✅ Only semantic tokens (--color-*) used throughout codebase
 
 ### Benefits Achieved:
@@ -481,8 +481,8 @@ grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="sem
 
 **These practices will BREAK the migration and MUST be avoided:**
 
-❌ **NEVER create compatibility mappings in semantic-color-variables.scss:**
-```scss
+❌ **NEVER create compatibility mappings in semantic-color-variables.css:**
+```css
 /* BAD - This defeats the entire purpose */
 :root {
   --color-brand-primary: #0066cc;
@@ -493,7 +493,7 @@ grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="sem
 ```
 
 ❌ **NEVER leave non-semantic variables as bridges:**
-```scss
+```css
 /* BAD - Find and replace these directly */
 .component {
   color: var(--muted-foreground);  /* ❌ Replace with --color-text-secondary */
@@ -503,7 +503,7 @@ grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="sem
 ```
 
 ✅ **CORRECT approach - Direct semantic token usage:**
-```scss
+```css
 /* GOOD - Only semantic tokens */
 :root {
   --color-brand-primary: #0066cc;
@@ -521,13 +521,13 @@ grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="sem
 **Final result requirement:** The ONLY CSS variables allowed in the final codebase are:
 - `--color-{section}-{token}` (semantic tokens)
 - `--spacing-*`, `--radius-*`, `--shadow-*`, `--transition-*` (non-color design tokens)
-- Primitive color values in `semantic-color-variables.scss` ONLY
+- Primitive color values in `semantic-color-variables.css` ONLY
 
 ---
 
 ## Implementation Rules
 
-1. **Single Source of Truth**: Only `src/styles/semantic-color-variables.scss` may contain actual color values
+1. **Single Source of Truth**: Only `src/styles/semantic-color-variables.css` may contain actual color values
 
 2. **Complete Replacement**: Replace ALL color usage (variables, hex, rgb, named colors) with semantic tokens
 
@@ -548,14 +548,14 @@ grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="sem
 ## Example Transformations
 
 **Before:**
-```scss
+```css
 .button-primary { background: #0066cc; }
 .card { background: white; border: 1px solid #ddd; }
 .text { color: #333; }
 ```
 
 **After:**
-```scss
+```css
 .button-primary { background: var(--color-brand-primary); }
 .card {
   background: var(--color-container-paper);
@@ -565,7 +565,7 @@ grep -r "\bwhite\b\|\bblack\b\|\bred\b\|\bblue\b\|\bgreen\b" src/ --exclude="sem
 ```
 
 **Semantic tokens file:**
-```scss
+```css
 :root {
   --color-brand-primary: #0066cc;
   --color-container-paper: white;
