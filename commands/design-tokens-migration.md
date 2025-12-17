@@ -28,11 +28,11 @@ Use this table as the definitive guide for mapping any color usage to semantic t
 
 ### `brand` — strong interactive component backgrounds
 
-| Token                           | Use For                                              |
-|---------------------------------|------------------------------------------------------|
-| `--color-brand-primary`         | Primary buttons, main call-to-action backgrounds    |
-| `--color-brand-primary-hover`   | Hover state for primary interactive elements        |
-| `--color-brand-primary-selected`| Selected/active state for primary elements          |
+| Token                           | Use For                                                    |
+|---------------------------------|------------------------------------------------------------|
+| `--color-brand-primary`         | Primary buttons, main call-to-action component backgrounds |
+| `--color-brand-primary-hover`   | Hover state for primary interactive elements               |
+| `--color-brand-primary-selected`| Selected/active state for primary elements                 |
 
 ### `status` — state indicators (interactive or text)
 
@@ -48,7 +48,7 @@ Use this table as the definitive guide for mapping any color usage to semantic t
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
 | `--color-container-paper`          | Cards, dialogs, sheets, component backgrounds                                                                           |
 | `--color-container-paper-hover`    | Hoverable component backgrounds                                                                                         |
-| `--color-container-paper-selected` | Selected component backgrounds (e.g., active note)                                                                      |
+| `--color-container-paper-selected` | Selected component backgrounds (e.g., selected item)                                                                    |
 | `--color-container-info`           | Background for informational elements (e.g., default chips or default notice banners) - never same value as status info |
 | `--color-container-success`        | Background for success / confirmation states (e.g., chips or notice banners) - never same value as status success       |
 | `--color-container-error`          | Background for error / destructive states (e.g., chips or notice banners) - never same value as status error            |
